@@ -1,0 +1,28 @@
+Configuration:
+  status: warn
+  name: MQTTKpi
+  Properties:
+    property:
+      -
+        name: "logDir"
+        value: "logs/mqtt_kpi_publisher/logs"
+      -
+        name: "logFilename"
+        value: "mqtt_kpi_publisher_logs.log"
+  Appenders:
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    File:
+      name: File_Appender
+      fileName: ${logDir}/${logFilename}
+      PatternLayout:
+        Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+  Loggers:
+    Root:
+      level: warn
+      AppenderRef:
+        - ref: Console_Appender
+        - ref: File_Appender

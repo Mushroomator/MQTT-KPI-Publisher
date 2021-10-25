@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Coordinates -->
+    <groupId>de.othr</groupId>
+    <artifactId>MqttKpiPublisher</artifactId>
+    <version>0.1</version>
+    <packaging>jar</packaging>
+
+    <!-- Information on the project and developers -->
+    <name>MQTT KPI Publisher</name>
+    <description>
+        A framework to simplify the development of applications that collect KPIs and publish those via MQTT to a MQTT message broker.
+    </description>
+    <url></url>
+    <developers>
+        <developer>
+            <name>Thomas Pilz</name>
+            <email>topi50@gmx.de</email>
+            <url>https://github.com/Mushroomator</url>
+            <organization>OTH Regensburg</organization>
+            <organizationUrl>https://www.oth-regensburg.de/</organizationUrl>
+        </developer>
+    </developers>
+
+    <!-- License information -->
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <!-- Information of source control system used -->
+    <scm>
+        <connection>scm:git:https://github.com/Mushroomator/MQTT-KPI-Publisher.git</connection>
+        <developerConnection>scm:git:ssh://github.com/Mushroomator/MQTT-KPI-Publisher.git</developerConnection>
+        <url>https://github.com/Mushroomator/MQTT-KPI-Publisher/tree/main</url>
+    </scm>
+
+    <properties>
+        <!-- Set compile options -->
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Set dependency versions -->
+        <org.eclipse.paho.mqttv5.client.version>1.2.5</org.eclipse.paho.mqttv5.client.version>
+        <log4j-api.version>2.14.1</log4j-api.version>
+        <log4j-core.version>2.14.1</log4j-core.version>
+        <log4j-slf4j18-impl.version>2.14.1</log4j-slf4j18-impl.version>
+        <jackson-databind.version>2.13.0</jackson-databind.version>
+        <jackson-dataformat-yaml.version>2.13.0</jackson-dataformat-yaml.version>
+    </properties>
+
+    <dependencies>
+        <!-- Eclipse Paho as MQTT client implementation for Java (see https://github.com/eclipse/paho.mqtt.java) -->
+        <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.mqttv5.client -->
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.mqttv5.client</artifactId>
+            <version>${org.eclipse.paho.mqttv5.client.version}</version>
+        </dependency>
+
+        <!-- LOGGING -->
+        <!-- Log4j 2 API -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j-api.version}</version>
+        </dependency>
+        <!-- Log4j 2 core implementation -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j-core.version}</version>
+        </dependency>
+        <!-- Log4j 2 implementation for SLF4J as the logging facade -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j18-impl</artifactId>
+            <version>${log4j-slf4j18-impl.version}</version>
+        </dependency>
+
+        <!-- JSON processing -->
+        <!-- Jackson JSON (de)serializer, required to send JSON messages and to parse YAML Log4j configuration-->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+        <!-- Jackson YAML dependency. Required to read log4j YAML configuration -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${jackson-dataformat-yaml.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,46 @@
+
+# ---------------------------------------------------------------------------------------
+# MQTT KPI Publisher - Build and release new version
+#
+# Description: Builds the project and creates a new Github release which contains the 
+#              compiled .jar file.
+#
+# Date: 2021/08/10
+# Author: Thomas Pilz
+# ---------------------------------------------------------------------------------------
+name: "Create release on push to main"
+
+# Trigger workflow on each push to main
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  buildAndRelease:
+    name: "Build and release MQTT KPI Publisher"
+    runs-on: "ubuntu-latest"
+
+    steps:
+    # Checkout the code from the repository    
+      - name: Checkout repository code
+        uses: actions/checkout@v2
+    # Setup Java and Maven
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16'
+          distribution: 'adopt'
+      - name: "Build Maven project"
+        run: |
+          mvn -B clean package
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${{ github.sha }} | cut -c1-8`" >> $GITHUB_ENV
+      - uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.SHORT_SHA }}"
+          prerelease: false
+          title: "MQTT KPI Publisher - sha:${{ env.SHORT_SHA }}"
+          files: |
+            LICENSE
+            /home/runner/work/MQTT-KPI-Publisher/MQTT-KPI-Publisher/target/*.jar
