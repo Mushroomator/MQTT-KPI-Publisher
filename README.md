@@ -20,7 +20,7 @@ Currently this mini-framework is not available for download from Maven Central o
     <artifactId>MqttKpiPublisher</artifactId>
     <version>0.1</version>
     <scope>system</scope>
-    <systemPath>${project.basedir}/path/to/jarfile/MqttKpiPublisher-0.1.jar</systemPath>
+    <systemPath>${path-to-mqtt_kpi_publisher-jar}</systemPath>
 </dependency>
 ```  
 Each push to the main branch will trigger a tag and a corresponding release to be created. Take a look at the [Releases](https://github.com/Mushroomator/MQTT-KPI-Publisher/releases) to get the desired version. 

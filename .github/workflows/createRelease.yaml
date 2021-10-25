@@ -43,4 +43,4 @@ jobs:
           title: "MQTT KPI Publisher - sha:${{ env.SHORT_SHA }}"
           files: |
             LICENSE
-            /home/runner/work/MQTT-KPI-Publisher/MQTT-KPI-Publisher/target/*.jar
+            /home/runner/work/MQTT-KPI-Publisher/MQTT-KPI-Publisher/target/*jar-with-dependencies.jar

@@ -70,11 +70,11 @@ public class MqttKpiPublisher {
 
     /**
      * Start MQTT KPI
-     * @param mqttKpiCollector
-     * @param options
+     * @param mqttKpiPublisher code to execute to read KPIs
+     * @param options options for MQTT connection
      */
-    public static void runMqttKpiCollector(IMqttKpiPublisher mqttKpiCollector, MqttKpiPublisherOptions options) {
-        if(instance == null) instance = new MqttKpiPublisher(mqttKpiCollector, options);
+    public static void runMqttKpiCollector(IMqttKpiPublisher mqttKpiPublisher, MqttKpiPublisherOptions options) {
+        if(instance == null) instance = new MqttKpiPublisher(mqttKpiPublisher, options);
 
     }
 
@@ -132,9 +132,14 @@ public class MqttKpiPublisher {
      * @param iOnMqttConFailed callback if connection could not be established
      */
     private void connect2MqttMsgBroker(IOnMqttConSuccess iOnMqttConSuccess, IOnMqttConFailed iOnMqttConFailed){
+        var reconMin = 30;
+        var numRetries = 5;
+        var reconMax = reconMin * numRetries * this.mqttKpiPublisherOptions.getMqttConnectionTimeout();
         // Set MQTT connection options
         MqttConnectionOptions options = new MqttConnectionOptionsBuilder()
                 .automaticReconnect(true)
+                // try to reconnect after 30 seconds or
+                .automaticReconnectDelay(reconMin, reconMax)
                 .connectionTimeout(mqttKpiPublisherOptions.getMqttConnectionTimeout())
                 .cleanStart(true)
                 .build();
@@ -265,8 +270,8 @@ public class MqttKpiPublisher {
      * Handle "SIGTERM" signal, to gracefully shut down this process.
      */
     private void handleSigterm(){
-        SignalHandler handleSignal = signal -> {
-            logger.info("Received signal {}. Shutting down MQTT client with ID {}...", signal.getName(), mqttKpiPublisherOptions.getMqttClientId());
+        Thread shutdownHook = new Thread(() -> {
+            logger.info("JVM will be shutdown. Shutting down MQTT client with ID {}...", mqttKpiPublisherOptions.getMqttClientId());
             // shutdown executor service gracefully
             executorService.shutdown();
             try {
@@ -278,9 +283,8 @@ public class MqttKpiPublisher {
                 executorService.shutdownNow();
             }
             logger.info("MQTT client with ID {} was shutdown.", mqttKpiPublisherOptions.getMqttClientId());
-        };
-        Signal.handle(new Signal("TERM"), handleSignal);
-        Signal.handle(new Signal("INT"), handleSignal);
+        });
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 
 }

@@ -25,4 +25,3 @@ Configuration:
       level: warn
       AppenderRef:
         - ref: Console_Appender
-        - ref: File_Appender
