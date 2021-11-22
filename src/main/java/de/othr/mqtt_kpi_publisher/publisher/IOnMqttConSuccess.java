@@ -25,7 +25,7 @@ public interface IOnMqttConSuccess {
     /**
      * Callback for when MQTT connection was successfully established
      * @param mqttClient MQTT asynchronous client
-     * @param mqttToken Token for connection
+     * @param mqttToken Token for tracking the completion of an asynchronous task (returned by all non-blocking methods)
      */
     public void run(IMqttAsyncClient mqttClient, IMqttToken mqttToken);
 }

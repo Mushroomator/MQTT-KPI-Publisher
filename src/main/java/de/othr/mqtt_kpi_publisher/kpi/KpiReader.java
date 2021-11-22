@@ -31,8 +31,6 @@ limitations under the License.
  * Class to read temperature off temperature sensor.
  */
 public class KpiReader implements Runnable {
-
-    private static final Random rnd = new Random();
     private static final ObjectMapper objMapper = new ObjectMapper();
     private IMqttAsyncClient client;
     private final IMqttKpiPublisher mqttKpiCollector;
@@ -72,8 +70,8 @@ public class KpiReader implements Runnable {
         // That is what we want here. It's not crucial if a single measurement is missing in thousands of measurements.
         // But there is a hugh performance boost using this asynchronous "call and forget" method.
         msg.setQos(0);
-        //
-        msg.setRetained(true);
+        // No need for the broker to store this message
+        msg.setRetained(false);
         // publish message under given topic
         try {
             client.publish("/%s/%s".formatted(topic, clientId),msg);

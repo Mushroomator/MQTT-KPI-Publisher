@@ -4,27 +4,48 @@
 Simple Java mini-framework simplifying development of simple MQTT Java clients which just collect and publish to a MQTT message broker.
 Very simple implementation used to quickly setup many in essence very similar clients. The application was written using Open JDK 16.
 
+> This repository is part of the [MQTT KPI Collection Project](https://github.com/Mushroomator/MQTT-KPI-Collection-Project).
+
 ## Table of Contents
 - [MQTT KPI Publisher](#mqtt-kpi-publisher)
   - [Table of Contents](#table-of-contents)
   - [Getting started](#getting-started)
+  - [Releases](#releases)
   - [Usage](#usage)
   - [Environment variables](#environment-variables)
   - [License](#license)
 
 ## Getting started
-Currently this mini-framework is not available for download from Maven Central or any other repository, so you will have to download the .jar provided with each release and include the dependency to your pom.xml as follows:
+MQTT KPI Publisher is currently not available on Maven Central or any other repository, so you need to download the desired version of the .jar from the [release page](https://github.com/Mushroomator/MQTT-KPI-Publisher/releases). You may choose to do this manually or (e.g. in a Dockerfile) use the following command:
+```bash
+MQTT_KPI_PUBLISHER_RELEASE_TAG=b40485a7
+wget https://github.com/Mushroomator/MQTT-KPI-Publisher/releases/download/$MQTT_KPI_PUBLISHER_RELEASE_TAG/MqttKpiPublisher-0.1-jar-with-dependencies.jar
+```
+> Please note: The release tag will always be the first 8 characters of the commit hash the MQTT KPI Publisher is based on.
+
+Then install the .jar into your [local Maven repository](https://www.baeldung.com/maven-local-repository):
+```bash
+mvn install:install-file \
+-Dfile=/path/to/MqttKpiPublisher-0.1-jar-with-dependencies.jar \
+-DgroupId=de.othr \
+-DartifactId=MqttKpiPublisher \
+-Dversion=0.1 \
+-Dpackaging=jar \
+-DgeneratePom=true
+```
+Now you may add MQTT KPI Publisher to your `pom.xml` as with any other dependency that is available on Maven Central:
 ```xml
 <dependency>
     <groupId>de.othr</groupId>
     <artifactId>MqttKpiPublisher</artifactId>
     <version>0.1</version>
-    <scope>system</scope>
-    <systemPath>${path-to-mqtt_kpi_publisher-jar}</systemPath>
 </dependency>
-```  
+```
+You can now compile and package your application with the MQTT KPI Publisher using `maven clean package`.
+
+## Releases
 Each push to the main branch will trigger a tag and a corresponding release to be created. Take a look at the [Releases](https://github.com/Mushroomator/MQTT-KPI-Publisher/releases) to get the desired version. 
-> Please note: the version as part of the Maven coordinates does not change as of now at will stay at 0.1
+> Please note: the version as part of the Maven coordinates does not change as of now and therefore will stay at `0.1`.
 
 ## Usage
 To use the framework you essentially just need to implement the [IMqttKpiPublisher interface](src/main/java/de/othr/mqtt_kpi_publisher/publisher/IMqttKpiPublisher.java) and provide the 3 mandatory options `MQTT message broker URL`, `MQTT client-ID` and `MQTT topic`. For more information on those and other options as well as different way to set those options please see [section "Environment variables"](#environment-variables).

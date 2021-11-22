@@ -1,4 +1,4 @@
-package de.othr.mqtt_kpi_publisher;
+package de.othr.mqtt_kpi_publisher.helpers;
 /*
 Copyright 2021 Thomas Pilz
 

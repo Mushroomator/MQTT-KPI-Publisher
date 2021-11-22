@@ -1,6 +1,6 @@
 package de.othr.mqtt_kpi_publisher.publisher;
 
-import de.othr.mqtt_kpi_publisher.Defaults;
+import de.othr.mqtt_kpi_publisher.helpers.Defaults;
 
 import java.util.Objects;
 

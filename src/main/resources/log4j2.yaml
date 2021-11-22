@@ -22,6 +22,6 @@ Configuration:
         Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
   Loggers:
     Root:
-      level: warn
+      level: info
       AppenderRef:
         - ref: Console_Appender

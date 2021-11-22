@@ -15,14 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import de.othr.mqtt_kpi_publisher.Utils;
+import de.othr.mqtt_kpi_publisher.helpers.Defaults;
+import de.othr.mqtt_kpi_publisher.helpers.Utils;
+import de.othr.mqtt_kpi_publisher.helpers.Validator;
 import de.othr.mqtt_kpi_publisher.kpi.KpiReader;
 import org.eclipse.paho.mqttv5.client.*;
+import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -93,7 +94,7 @@ public class MqttKpiPublisher {
                     mqttAsyncClient,
                     this.mqttKpiPublisherOptions.getMqttClientId(),
                     this.mqttKpiPublisherOptions.getMqttTopic(),
-                    mqttKpiCollector
+                    this.mqttKpiCollector
             );
             // run task periodically
             executorService.scheduleWithFixedDelay(kpiReader,
@@ -132,20 +133,16 @@ public class MqttKpiPublisher {
      * @param iOnMqttConFailed callback if connection could not be established
      */
     private void connect2MqttMsgBroker(IOnMqttConSuccess iOnMqttConSuccess, IOnMqttConFailed iOnMqttConFailed){
-        var reconMin = 30;
-        var numRetries = 5;
-        var reconMax = reconMin * numRetries * this.mqttKpiPublisherOptions.getMqttConnectionTimeout();
+        var persistence = new MemoryPersistence();
         // Set MQTT connection options
         MqttConnectionOptions options = new MqttConnectionOptionsBuilder()
                 .automaticReconnect(true)
-                // try to reconnect after 30 seconds or
-                .automaticReconnectDelay(reconMin, reconMax)
                 .connectionTimeout(mqttKpiPublisherOptions.getMqttConnectionTimeout())
                 .cleanStart(true)
                 .build();
         try {
             // Use async MQTT client for better performance/ non-blocking operations
-            var client = new MqttAsyncClient(mqttKpiPublisherOptions.getMqttMsgBrokerUrl(), mqttKpiPublisherOptions.getMqttClientId());
+            var client = new MqttAsyncClient(mqttKpiPublisherOptions.getMqttMsgBrokerUrl(), mqttKpiPublisherOptions.getMqttClientId(), persistence);
             client.connect(options, null, new MqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
@@ -218,6 +215,9 @@ public class MqttKpiPublisher {
             mqttClientId = argOpts.getMqttClientId();
         }
         else mqttClientId = envOpts.getMqttClientId();
+        // validate set client-ID
+        var validationResult = Validator.isClientIdValid(mqttClientId, Defaults.CHARS_CLIENT_ID, Defaults.CLIENT_ID_PATTERN);
+        if(!validationResult.isValid()) throw new IllegalArgumentException(validationResult.getErrMsg());
 
         // MQTT Message Broker URL
         String mqttMsgBrokerUrl;

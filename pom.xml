@@ -96,6 +96,7 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
         </dependency>
+
         <!-- Jackson YAML dependency. Required to read log4j YAML configuration -->
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
         <dependency>
@@ -116,7 +117,6 @@
     <build>
         <plugins>
             <plugin>
-                <!-- Let Maven create a single .jar file with manifest -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -128,10 +128,9 @@
                 </executions>
                 <configuration>
                     <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>de.othr.mqtt_kpi_publisher.publisher.MqttKpiPublisher</mainClass>
-                        </manifest>
+                        <manifestEntries>
+                            <Multi-Release>true</Multi-Release>
+                        </manifestEntries>
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
